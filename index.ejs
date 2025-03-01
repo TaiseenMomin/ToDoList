@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+        // Scroll to top when a new task is added
+        function scrollToTop() {
+            document.getElementById("task-container").scrollIntoView({ behavior: "smooth" });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List ✅</h1>
+        
+        <!-- Task Form -->
+        <form action="/add" method="POST" onsubmit="scrollToTop()">
+            <input type="text" name="title" placeholder="Add a new task..." required>
+            <button type="submit">ADD</button>
+        </form>
+
+        <div id="task-container">
+            <!-- Pending Tasks -->
+            <h2>Pending Tasks</h2>
+            <ul>
+                <% tasks.forEach(task => { %>
+                    <% if (!task.completed) { %>
+                        <li>
+                            <form action="/complete/<%= task._id %>" method="POST" style="display:inline;">
+                                <button type="submit">✅</button>
+                            </form>
+                            <%= task.title %>
+                            <form action="/delete/<%= task._id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="delete-btn">❌</button>
+                            </form>
+                        </li>
+                    <% } %>
+                <% }) %>
+            </ul>
+
+            <!-- Completed Tasks -->
+            <h2>Completed Tasks</h2>
+            <ul>
+                <% tasks.forEach(task => { %>
+                    <% if (task.completed) { %>
+                        <li>
+                            <%= task.title %>
+                            <form action="/delete/<%= task._id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="delete-btn">🗑️</button>
+                            </form>
+                        </li>
+                    <% } %>
+                <% }) %>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
